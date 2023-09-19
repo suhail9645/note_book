@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:note_book/core/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,12 +10,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppRouter appRouter=AppRouter();
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+      onGenerateRoute: appRouter.onGenerateRoute,
       
     );
   }
