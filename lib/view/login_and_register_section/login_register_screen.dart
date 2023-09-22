@@ -1,12 +1,12 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_book/core/const/lists.dart';
 import 'package:note_book/core/const/widget.dart';
 import 'dart:math' as math;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
-import '../widget/custom_traingle.dart';
+import '../widget/primary_form.dart';
+import 'widget/login_view.dart';
 
 class LoginAndRegisterScreen extends StatefulWidget {
   const LoginAndRegisterScreen({super.key});
@@ -18,7 +18,7 @@ class LoginAndRegisterScreen extends StatefulWidget {
 class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
     with SingleTickerProviderStateMixin {
   late final AnimationController aController =
-      AnimationController(vsync: this, duration:const Duration(seconds: 5))
+      AnimationController(vsync: this, duration: const Duration(seconds: 5))
         ..repeat();
   @override
   Widget build(BuildContext context) {
@@ -123,17 +123,40 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
                 Align(
                   alignment: const Alignment(0, -0.30),
                   child: Container(
-                    height: screenHight * 0.70,
+                    height: screenHight * 0.65,
                     width: double.infinity,
                     // color: const Color.fromARGB(107, 255, 193, 7),
                     child: PageView(
                       controller: controller,
                       children: [
+                        const LogiView(),
                         Container(
-                          color: Color.fromARGB(86, 43, 203, 48),
-                        ),
-                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 23),
                           color: Color.fromARGB(86, 219, 139, 46),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Register\nNow',
+                                    style: GoogleFonts.inika(
+                                        letterSpacing: 2,
+                                        fontSize: 45,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                  
+                                ],
+                              ),
+                              spaceForHeight30,
+                                  ...List.generate(
+                                    2,
+                                    (index) => PrimaryForm(
+                                      title: loginFormTitles[index],
+                                      hint: loginFormHints[index],
+                                    ),
+                                  ),
+                            ],
+                          ),
                         )
                       ],
                     ),
@@ -151,20 +174,18 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
 class StarPainter extends CustomPainter {
   late Paint painter;
   final Color color;
-  StarPainter(this.color){
-     painter = Paint()
+  StarPainter(this.color) {
+    painter = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
   }
   @override
   void paint(Canvas canvas, Size size) {
-   
-
     final double centerX = size.width / 2;
     final double centerY = size.height / 2;
-    final double radius = size.width / 4; 
+    final double radius = size.width / 4;
 
-    final double rotation = -pi / 10.0; 
+    final double rotation = -pi / 10.0;
 
     Path path = Path();
 
@@ -189,6 +210,7 @@ class StarPainter extends CustomPainter {
     return false;
   }
 }
+
 class StarPainter2 extends CustomPainter {
   final Color fillColor;
   final double cornerRadius;
