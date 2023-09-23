@@ -1,12 +1,11 @@
-import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_book/core/const/lists.dart';
-import 'package:note_book/core/const/widget.dart';
 import 'dart:math' as math;
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../widget/primary_form.dart';
+import '../widget/custom_triangle.dart';
 import 'widget/login_view.dart';
+import 'widget/register_view.dart';
 
 class LoginAndRegisterScreen extends StatefulWidget {
   const LoginAndRegisterScreen({super.key});
@@ -59,7 +58,7 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
                   ),
                 ),
                 Align(
-                  alignment: Alignment(-0.80, -0.89),
+                  alignment: const Alignment(-0.80, -0.89),
                   child: SmoothPageIndicator(
                     controller: controller,
                     count: 2,
@@ -130,34 +129,7 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
                       controller: controller,
                       children: [
                         const LogiView(),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 23),
-                          color: Color.fromARGB(86, 219, 139, 46),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Register\nNow',
-                                    style: GoogleFonts.inika(
-                                        letterSpacing: 2,
-                                        fontSize: 45,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  
-                                ],
-                              ),
-                              spaceForHeight30,
-                                  ...List.generate(
-                                    2,
-                                    (index) => PrimaryForm(
-                                      title: loginFormTitles[index],
-                                      hint: loginFormHints[index],
-                                    ),
-                                  ),
-                            ],
-                          ),
-                        )
+                        RegisterView(screenWidth: screenWidth)
                       ],
                     ),
                   ),
@@ -171,85 +143,3 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
   }
 }
 
-class StarPainter extends CustomPainter {
-  late Paint painter;
-  final Color color;
-  StarPainter(this.color) {
-    painter = Paint()
-      ..color = color
-      ..style = PaintingStyle.fill;
-  }
-  @override
-  void paint(Canvas canvas, Size size) {
-    final double centerX = size.width / 2;
-    final double centerY = size.height / 2;
-    final double radius = size.width / 4;
-
-    final double rotation = -pi / 10.0;
-
-    Path path = Path();
-
-    for (int i = 0; i < 5; i++) {
-      double x = centerX + cos(2 * pi * i / 5 + rotation) * radius;
-      double y = centerY + sin(2 * pi * i / 5 + rotation) * radius;
-
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
-    }
-
-    path.close();
-
-    canvas.drawPath(path, painter);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-class StarPainter2 extends CustomPainter {
-  final Color fillColor;
-  final double cornerRadius;
-
-  StarPainter2({
-    required this.fillColor,
-    required this.cornerRadius,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = fillColor
-      ..style = PaintingStyle.fill;
-
-    final path = Path()
-      ..moveTo(size.width / 2, 0)
-      ..lineTo(size.width * 0.7, size.height * 0.3)
-      ..lineTo(size.width, size.height * 0.4)
-      ..lineTo(size.width * 0.8, size.height * 0.7)
-      ..lineTo(size.width * 0.9, size.height)
-      ..lineTo(size.width / 2, size.height * 0.8)
-      ..lineTo(size.width * 0.1, size.height)
-      ..lineTo(size.width * 0.2, size.height * 0.7)
-      ..lineTo(0, size.height * 0.4)
-      ..lineTo(size.width * 0.3, size.height * 0.3)
-      ..close();
-
-    canvas.drawRRect(
-        RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(cornerRadius),
-        ),
-        paint);
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}

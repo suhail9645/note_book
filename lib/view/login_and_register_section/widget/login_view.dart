@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_book/core/const/widget.dart';
@@ -22,7 +21,7 @@ class LogiView extends StatelessWidget {
               Text(
                 'Welcome\nBack',
                 style: GoogleFonts.inika(
-                  letterSpacing: 2,
+                    letterSpacing: 2,
                     fontSize: 45,
                     fontWeight: FontWeight.bold),
               ),
@@ -51,8 +50,7 @@ class LogiView extends StatelessWidget {
                     child: Text(
                       'G',
                       style: GoogleFonts.lato(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold),
+                          fontSize: 32, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
@@ -60,18 +58,22 @@ class LogiView extends StatelessWidget {
               const Expanded(flex: 1, child: SizedBox()),
               Expanded(
                 flex: 3,
-                child: Container(
-                  height: 47,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF68D4EB),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Sign In',
-                      style: GoogleFonts.lato(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, 'Home Screen');
+                  },
+                  child: Container(
+                    height: 47,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF68D4EB),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Sign In',
+                        style: GoogleFonts.lato(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
                 ),
