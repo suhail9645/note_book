@@ -1,19 +1,25 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_book/controller/controllers/auth_controller.dart';
+import 'package:provider/provider.dart';
 import '../../../core/const/lists.dart';
 import '../../../core/const/widget.dart';
 import '../../widget/primary_form.dart';
 
 class RegisterView extends StatelessWidget {
-  const RegisterView({
+   RegisterView({
     super.key,
     required this.screenWidth,
   });
-
-  final double screenWidth;
+  final TextEditingController _emailAddress=TextEditingController();
+   final TextEditingController _password=TextEditingController();
+   
+     final double screenWidth;
 
   @override
   Widget build(BuildContext context) {
+    List<TextEditingController>controllers=[_emailAddress,_password];
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 23),
       child: Column(
@@ -35,28 +41,52 @@ class RegisterView extends StatelessWidget {
             (index) => PrimaryForm(
               title: loginFormTitles[index],
               hint: loginFormHints[index],
+              controller: controllers[index],
             ),
           ),
           spaceForHeight30,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Container(
-                height: 47,
-                width: screenWidth * 0.50,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF6885EB),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Center(
-                  child: Text(
-                    'Register',
-                    style: GoogleFonts.lato(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
+              Consumer<AuthController>(builder: (context, value, child) {
+               
+                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                     if (value.failure != null&&!value.isLoading) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(value.failure!.message),
+                      ),
+                    );
+                  }else if(value.isSuccess){
+                    Navigator.pushNamed(context, 'Home Screen');
+                  }
+                  }
+                  );
+                
+                
+                return InkWell(
+                  onTap: () {
+                    Provider.of<AuthController>(context, listen: false)
+                        .onSignUp(_emailAddress.text, _password.text);
+                    
+                  },
+                  child: Container(
+                    height: 47,
+                    width: screenWidth * 0.50,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF6885EB),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Register',
+                        style: GoogleFonts.lato(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              }),
             ],
           )
         ],

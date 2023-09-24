@@ -6,12 +6,14 @@ import '../../../core/const/lists.dart';
 import '../../widget/primary_form.dart';
 
 class LogiView extends StatelessWidget {
-  const LogiView({
+   LogiView({
     super.key,
   });
-
+final TextEditingController _emailAddress=TextEditingController();
+   final TextEditingController _password=TextEditingController();
   @override
   Widget build(BuildContext context) {
+    List<TextEditingController>controllers=[_emailAddress,_password];
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 23),
       child: Column(
@@ -32,7 +34,7 @@ class LogiView extends StatelessWidget {
             2,
             (index) => PrimaryForm(
               title: loginFormTitles[index],
-              hint: loginFormHints[index],
+              hint: loginFormHints[index], controller:controllers[index] ,
             ),
           ),
           spaceForHeight30,

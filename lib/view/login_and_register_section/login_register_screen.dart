@@ -128,7 +128,7 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
                     child: PageView(
                       controller: controller,
                       children: [
-                        const LogiView(),
+                         LogiView(),
                         RegisterView(screenWidth: screenWidth)
                       ],
                     ),
