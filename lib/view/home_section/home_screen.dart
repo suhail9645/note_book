@@ -2,6 +2,7 @@ import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_book/core/const/lists.dart';
 import 'package:note_book/core/const/widget.dart';
 
 const cellRed = Color(0xffc73232);
@@ -82,26 +83,57 @@ class HomeScreen extends StatelessWidget {
               ),
               spaceForHeight20,
               Flexible(
-                child: StaggeredGrid.custom(
-                  delegate: StaggeredGrid,
-                
-                 
-                  // shrinkWrap: true,
-                  // physics: AlwaysScrollableScrollPhysics(),
-
-                  crossAxisCount: 2, crossAxisSpacing: 10, mainAxisSpacing: 5,
-                  children: List.generate(10, (index) {
-                    return Container(
-                      constraints:
-                          BoxConstraints(maxHeight: 200, minHeight: 100),
-                      color: Colors.amber,
-                      child:index%2==0? Text('Reply to emails'
-                          'Prepare presentation slides for the marketing meeting'
-                          'Conduct research on competitor products'
-                          'Schedule and plan customer interviews'
-                          'Take a break and recharge '):Text('Share insights and findings from recent competitive analysis.'),
-                    );
-                  }),
+                child: ListView(
+                  children: [
+                    StaggeredGrid.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 5,
+                      children: List.generate(10, (index) {
+                        Color color = noteTileColors[index % 5];
+                        return Container(
+                            padding: const EdgeInsets.all(8),
+                            constraints: const BoxConstraints(
+                                maxHeight: 200, minHeight: 100),
+                            decoration: BoxDecoration(
+                              color: color,
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            child: Container(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.vertical,
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Product design',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium,
+                                    ),
+                                    index % 4 == 0
+                                        ? Text(
+                                            'Reply to emails'
+                                            'Prepare presentation slides for the marketing meeting'
+                                            'Conduct research on competitor products'
+                                            'Schedule and plan customer interviews'
+                                            'Take a break and recharge',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall,
+                                          )
+                                        : Text(
+                                            'Share insights and findings from recent competitive analysis.',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleSmall),
+                                  ],
+                                ),
+                              ),
+                            ));
+                      }),
+                    ),
+                  ],
                 ),
               )
             ],

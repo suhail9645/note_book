@@ -18,8 +18,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         textTheme: TextTheme(
-          
-        ),
+          titleMedium: GoogleFonts.roboto(fontSize: 15,fontWeight: FontWeight.bold),
+          titleSmall: GoogleFonts.roboto(fontSize: 13,fontWeight: FontWeight.w400)
+        ).apply(
+              bodyColor: Colors.black,
+              displayColor: Colors.black,
+            ),
         useMaterial3: true,
       ),
       onGenerateRoute: appRouter.onGenerateRoute,
