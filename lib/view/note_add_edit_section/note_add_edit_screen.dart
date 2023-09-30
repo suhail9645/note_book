@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_book/core/const/colors.dart';
 import 'package:note_book/core/const/widget.dart';
+import 'package:note_book/model/note_model/note_model.dart';
 import 'package:note_book/view/home_section/home_screen.dart';
-enum AddOrEdit{
-  addNote,
-  editNote
-}
+
+enum AddOrEdit { addNote, editNote }
 
 class NoteAddEditScreen extends StatelessWidget {
-  const NoteAddEditScreen({super.key, required this.addOrEdit});
-  final AddOrEdit  addOrEdit;
+  NoteAddEditScreen({super.key, required this.addOrEdit});
+  final AddOrEdit addOrEdit;
+
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final Note note=Note(heading: '', content: '');
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    double screenHight = size.height;
     double screenWidth = size.width;
     return Scaffold(
       body: SafeArea(
@@ -41,128 +43,153 @@ class NoteAddEditScreen extends StatelessWidget {
               ),
             ),
             SingleChildScrollView(
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 23),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    spaceForHeight30,
-                    const Branding(),
-                    spaceForHeight20,
-                    Text(
-                      'Title',
-                      style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      height: 90,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFB0E9CA),
-                        borderRadius: BorderRadius.circular(14),
+              child: Form(
+                key: formKey,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 23),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      spaceForHeight30,
+                      const Branding(),
+                      spaceForHeight20,
+                      Text(
+                        'Title',
+                        style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
                       ),
-                      child: Center(
+                      Center(
                         child: TextFormField(
+                         onChanged: (value) {
+                           note.heading=value;
+                         },
                           maxLines: 3,
-                          decoration: const InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                            hintText: 'Heading',
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                          ),
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: kFormColor,
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 0),
+                              hintText: 'Heading',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              )),
+                          validator: (value) {
+                            if (value == null || value == '') {
+                              return 'Heading required';
+                            } else {
+                              return null;
+                            }
+                          },
                         ),
                       ),
-                    ),
-                    spaceForHeight10,
-                    Text(
-                      'Content',
-                      style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
-                    ),
-                    Container(
-                      height: screenHight * 0.50,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        color: Color(0xFFD9D9D9),
-                        borderRadius: BorderRadius.circular(15),
+                      spaceForHeight10,
+                      Text(
+                        'Content',
+                        style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
                       ),
-                      child: TextFormField(
-                          maxLines: 17,
-                          decoration: const InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                      TextFormField(
+                         onChanged: (value) {
+                           note.content=value;
+                         },
+                          maxLines: 15,
+                          decoration:  InputDecoration(
+                             filled: true,
+                              fillColor: kFormColor,
+                            contentPadding:const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 0),
                             hintText: 'Content',
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15.0),
+                              borderSide: const BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                            )
                           ),
-                        ),
-                    ),
-                    spaceForHeight20,
-                addOrEdit==AddOrEdit.addNote? Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Container(
-                        height: 45,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF689FF3),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'ADD NOTE',
-                            style: GoogleFonts.lato(
-                                fontSize: 20, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ),
+                          validator: (value) {
+                            if (value == null || value == '') {
+                              return 'Content required';
+                            } else {
+                              return null;
+                            }
+                          }),
+                      spaceForHeight20,
+                      addOrEdit == AddOrEdit.addNote
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    if (formKey.currentState!.validate()) {
+                                      print('lalkakl');
+                                    }
+                                  },
+                                  child: Container(
+                                    height: 45,
+                                    width: 150,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF689FF3),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'ADD NOTE',
+                                        style: GoogleFonts.lato(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Expanded(
+                                  flex: 3,
+                                  child: Container(
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      color: const Color.fromARGB(
+                                          255, 240, 80, 48),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'DELETE',
+                                        style: GoogleFonts.lato(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                spaceForWidth10,
+                                Expanded(
+                                  flex: 5,
+                                  child: Container(
+                                    height: 45,
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF689FF3),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'EDIT NOTE',
+                                        style: GoogleFonts.lato(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                     ],
-                  ):Row(
-                  
-                    children: [
-                       Expanded(
-                        flex: 3,
-                         child: Container(
-                          height: 45,
-                         
-                          decoration: BoxDecoration(
-                            color:const Color.fromARGB(255, 240, 80, 48),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'DELETE',
-                              style: GoogleFonts.lato(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                                             ),
-                       ),
-                      spaceForWidth10,
-                      Expanded(
-                        flex: 5,
-                        child: Container(
-                          height: 45,
-                         
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF689FF3),
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: Center(
-                            child: Text(
-                              'EDIT NOTE',
-                              style: GoogleFonts.lato(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],),
-                
-                  ],
+                  ),
                 ),
               ),
             )

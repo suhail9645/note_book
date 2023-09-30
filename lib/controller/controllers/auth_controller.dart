@@ -29,5 +29,15 @@ isSuccess=true;
 notifyListeners();
  }
   }
-  
+ void onGoogleSignin()async{
+  isLoading=true;
+    notifyListeners();
+failure=await AuthServiceImp().signInWithGoogle(); 
+isLoading=false;
+ notifyListeners();
+ if(failure==null){
+isSuccess=true;
+notifyListeners();
+ }
+ } 
 }

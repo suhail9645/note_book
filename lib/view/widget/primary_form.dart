@@ -54,10 +54,6 @@ class PrimaryForm extends StatelessWidget {
                 style: BorderStyle.none,
             ),
             ),
-            // focusedBorder: InputBorder.none,
-            // enabledBorder: InputBorder.none,
-            // errorBorder: InputBorder.none,
-            // disabledBorder: InputBorder.none,
           ),
           validator: (_) => title == 'Email'
               ? userMOdel.validateEmail()

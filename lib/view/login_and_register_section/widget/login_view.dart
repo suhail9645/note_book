@@ -4,7 +4,6 @@ import 'package:note_book/controller/controllers/auth_controller.dart';
 import 'package:note_book/core/const/widget.dart';
 import 'package:note_book/model/user/user_model.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 import '../../../core/const/lists.dart';
 import '../../widget/primary_form.dart';
@@ -52,17 +51,23 @@ class LogiView extends StatelessWidget {
                 children: [
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      height: 47,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFA9AEAF),
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(
-                        child: Text(
-                          'G',
-                          style: GoogleFonts.lato(
-                              fontSize: 32, fontWeight: FontWeight.bold),
+                    child: InkWell(
+                      onTap: () {
+                        Provider.of<AuthController>(context, listen: false)
+                            .onGoogleSignin();
+                      },
+                      child: Container(
+                        height: 47,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFA9AEAF),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'G',
+                            style: GoogleFonts.lato(
+                                fontSize: 32, fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                     ),
@@ -112,11 +117,11 @@ class LogiView extends StatelessWidget {
                           );
                         } else {
                           return Container(
-                             height: 47,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFF68D4EB),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
+                            height: 47,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF68D4EB),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
                             child: Center(
                               child: Text(
                                 'Wait',
