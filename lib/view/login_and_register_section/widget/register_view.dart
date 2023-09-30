@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_book/controller/controllers/auth_controller.dart';
+import 'package:note_book/model/user/user_model.dart';
 import 'package:provider/provider.dart';
 import '../../../core/const/lists.dart';
 import '../../../core/const/widget.dart';
@@ -10,86 +10,97 @@ import '../../widget/primary_form.dart';
 class RegisterView extends StatelessWidget {
    RegisterView({
     super.key,
-    required this.screenWidth,
+    required this.screenWidth, required this.formKey,
   });
   final TextEditingController _emailAddress=TextEditingController();
    final TextEditingController _password=TextEditingController();
-   
+   final GlobalKey<FormState> formKey;
      final double screenWidth;
 
+ final UserMOdel userModel=UserMOdel();
   @override
   Widget build(BuildContext context) {
+    
     List<TextEditingController>controllers=[_emailAddress,_password];
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 23),
-      child: Column(
-        children: [
-          Row(
+    return SingleChildScrollView(
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 23),
+        child: Form(
+          key: formKey,
+          child: Column(
             children: [
-              Text(
-                'Register\nNow',
-                style: GoogleFonts.inika(
-                    letterSpacing: 2,
-                    fontSize: 45,
-                    fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Text(
+                    'Register\nNow',
+                    style: GoogleFonts.inika(
+                        letterSpacing: 2,
+                        fontSize: 45,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-            ],
-          ),
-          spaceForHeight30,
-          ...List.generate(
-            2,
-            (index) => PrimaryForm(
-              title: loginFormTitles[index],
-              hint: loginFormHints[index],
-              controller: controllers[index],
-            ),
-          ),
-          spaceForHeight30,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Consumer<AuthController>(builder: (context, value, child) {
-               
-                  WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                     if (value.failure != null&&!value.isLoading) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(value.failure!.message),
+              spaceForHeight30,
+              ...List.generate(
+                2,
+                (index) => PrimaryForm(
+                  title: loginFormTitles[index],
+                  hint: loginFormHints[index],
+                  controller: controllers[index],
+                  userMOdel: userModel,
+                ),
+              ),
+              spaceForHeight30,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Consumer<AuthController>(builder: (context, value, child) {
+                   
+                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                         if (value.failure != null&&!value.isLoading) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(value.failure!.message),
+                          ),
+                        );
+                      }else if(value.isSuccess){
+                        Navigator.pushNamed(context, 'Home Screen');
+                      }
+                      }
+                      );
+                    
+                    
+                    return InkWell(
+                      onTap: () {
+                        if(formKey.currentState!.validate()){
+                        Provider.of<AuthController>(context, listen: false)
+                            .onSignUp(userModel);
+                        }
+                        
+                        
+                      },
+                      child: Container(
+                        height: 47,
+                        width: screenWidth * 0.50,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF6885EB),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Register',
+                            style: GoogleFonts.lato(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        ),
                       ),
                     );
-                  }else if(value.isSuccess){
-                    Navigator.pushNamed(context, 'Home Screen');
-                  }
-                  }
-                  );
-                
-                
-                return InkWell(
-                  onTap: () {
-                    Provider.of<AuthController>(context, listen: false)
-                        .onSignUp(_emailAddress.text, _password.text);
-                    
-                  },
-                  child: Container(
-                    height: 47,
-                    width: screenWidth * 0.50,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6885EB),
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Register',
-                        style: GoogleFonts.lato(
-                            fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                );
-              }),
+                  }),
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:math' as math;
@@ -16,6 +17,7 @@ class LoginAndRegisterScreen extends StatefulWidget {
 
 class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
     with SingleTickerProviderStateMixin {
+      final GlobalKey<FormState>formKey=GlobalKey<FormState>();
   late final AnimationController aController =
       AnimationController(vsync: this, duration: const Duration(seconds: 5))
         ..repeat();
@@ -27,9 +29,7 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
     double screenWidth = size.width;
     return Scaffold(
       body: SafeArea(
-          child: Stack(
-        children: [
-          Container(
+          child: SizedBox(
             height: double.infinity,
             width: double.infinity,
             child: Stack(
@@ -128,17 +128,15 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
                     child: PageView(
                       controller: controller,
                       children: [
-                         LogiView(),
-                        RegisterView(screenWidth: screenWidth)
+                         LogiView(formKey: formKey,),
+                        RegisterView(screenWidth: screenWidth,formKey: formKey,)
                       ],
                     ),
                   ),
                 )
               ],
             ),
-          )
-        ],
-      )),
+          )),
     );
   }
 }

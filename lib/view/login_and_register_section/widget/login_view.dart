@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_book/core/const/widget.dart';
+import 'package:note_book/model/user/user_model.dart';
 
 import '../../../core/const/lists.dart';
 import '../../widget/primary_form.dart';
 
 class LogiView extends StatelessWidget {
    LogiView({
-    super.key,
+    super.key, required this.formKey,
   });
 final TextEditingController _emailAddress=TextEditingController();
    final TextEditingController _password=TextEditingController();
+   final UserMOdel userMOdel=UserMOdel();
+  final GlobalKey<FormState> formKey;
   @override
   Widget build(BuildContext context) {
     List<TextEditingController>controllers=[_emailAddress,_password];
@@ -33,6 +36,7 @@ final TextEditingController _emailAddress=TextEditingController();
           ...List.generate(
             2,
             (index) => PrimaryForm(
+              userMOdel: userMOdel,
               title: loginFormTitles[index],
               hint: loginFormHints[index], controller:controllers[index] ,
             ),
@@ -62,7 +66,7 @@ final TextEditingController _emailAddress=TextEditingController();
                 flex: 3,
                 child: InkWell(
                   onTap: () {
-                    Navigator.pushNamed(context, 'Home Screen');
+                   
                   },
                   child: Container(
                     height: 47,
