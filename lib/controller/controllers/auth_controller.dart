@@ -12,7 +12,22 @@ class AuthController extends ChangeNotifier{
 
  failure=await AuthServiceImp().signUpWithEmailAndPassword(userMOdel);
  isLoading=false;
- isSuccess=true;
  notifyListeners();
+ if(failure==null){
+isSuccess=true;
+notifyListeners();
+ }
   }
+  void onSignIn(UserMOdel userMOdel)async{
+    isLoading=true;
+    notifyListeners();
+    failure=await AuthServiceImp().signInWithEmailAndPassword(userMOdel); 
+    isLoading=false;
+ notifyListeners();
+ if(failure==null){
+isSuccess=true;
+notifyListeners();
+ }
+  }
+  
 }

@@ -1,7 +1,13 @@
 class UserMOdel{
   String? email;
   String?password;
-  UserMOdel();
+  UserMOdel._();
+  static final UserMOdel _instance = UserMOdel._();
+  factory UserMOdel(){
+  
+return _instance;
+
+  }
   String?validateEmail(){
     if(email==null||email==''){
        return 'Please Enter Email Address';

@@ -21,4 +21,16 @@ class AuthServiceImp {
   }
  
   }
+  Future<Failure?>signInWithEmailAndPassword(UserMOdel userMOdel)async{
+   FirebaseAuth auth=FirebaseAuth.instance;
+   try{
+    final userDetailes=await auth.signInWithEmailAndPassword(email: userMOdel.email!, password: userMOdel.password!);
+     SharedPreferences shrd=await SharedPreferences.getInstance();
+  shrd.setString('userUid', userDetailes.user!.uid);
+    return null;
+   } on FirebaseAuthException catch(_){
+    return Failure(error: 'Something wrong', message: 'No User With Given Detailes');
+   }
+  }
 }
+

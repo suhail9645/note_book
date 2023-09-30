@@ -17,13 +17,16 @@ class LoginAndRegisterScreen extends StatefulWidget {
 
 class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
     with SingleTickerProviderStateMixin {
-      final GlobalKey<FormState>formKey=GlobalKey<FormState>();
+      final GlobalKey<FormState>registerFormKey=GlobalKey<FormState>();
+      final GlobalKey<FormState>loginFormKey=GlobalKey<FormState>();
   late final AnimationController aController =
       AnimationController(vsync: this, duration: const Duration(seconds: 5))
+      
         ..repeat();
+      final   PageController controller = PageController();
   @override
   Widget build(BuildContext context) {
-    PageController controller = PageController();
+   
     Size size = MediaQuery.of(context).size;
     double screenHight = size.height;
     double screenWidth = size.width;
@@ -128,8 +131,8 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
                     child: PageView(
                       controller: controller,
                       children: [
-                         LogiView(formKey: formKey,),
-                        RegisterView(screenWidth: screenWidth,formKey: formKey,)
+                         LogiView(formKey: loginFormKey,),
+                        RegisterView(screenWidth: screenWidth,formKey:registerFormKey)
                       ],
                     ),
                   ),

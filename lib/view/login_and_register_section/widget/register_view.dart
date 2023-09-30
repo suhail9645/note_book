@@ -2,26 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_book/controller/controllers/auth_controller.dart';
 import 'package:note_book/model/user/user_model.dart';
+import 'package:note_book/view/login_and_register_section/login_register_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../core/const/lists.dart';
 import '../../../core/const/widget.dart';
 import '../../widget/primary_form.dart';
 
 class RegisterView extends StatelessWidget {
-   RegisterView({
+  RegisterView({
     super.key,
-    required this.screenWidth, required this.formKey,
+    required this.screenWidth,
+    required this.formKey,
   });
-  final TextEditingController _emailAddress=TextEditingController();
-   final TextEditingController _password=TextEditingController();
-   final GlobalKey<FormState> formKey;
-     final double screenWidth;
 
- final UserMOdel userModel=UserMOdel();
+  final GlobalKey<FormState> formKey;
+  final double screenWidth;
+
+  final UserMOdel userModel = UserMOdel();
   @override
   Widget build(BuildContext context) {
-    
-    List<TextEditingController>controllers=[_emailAddress,_password];
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 23),
@@ -46,7 +46,6 @@ class RegisterView extends StatelessWidget {
                 (index) => PrimaryForm(
                   title: loginFormTitles[index],
                   hint: loginFormHints[index],
-                  controller: controllers[index],
                   userMOdel: userModel,
                 ),
               ),
@@ -55,46 +54,62 @@ class RegisterView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Consumer<AuthController>(builder: (context, value, child) {
-                   
-                      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-                         if (value.failure != null&&!value.isLoading) {
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                      if (value.failure != null && !value.isLoading) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(value.failure!.message),
                           ),
                         );
-                      }else if(value.isSuccess){
+                        value.failure = null;
+                      } else if (value.isSuccess) {
                         Navigator.pushNamed(context, 'Home Screen');
                       }
-                      }
+                    });
+
+                    if (!value.isLoading) {
+                      return InkWell(
+                        onTap: () {
+                          if (formKey.currentState!.validate()) {
+                            Provider.of<AuthController>(context, listen: false)
+                                .onSignUp(userModel);
+                          }
+                        },
+                        child: Container(
+                          height: 47,
+                          width: screenWidth * 0.50,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF6885EB),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Register',
+                              style: GoogleFonts.lato(
+                                  fontSize: 20, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                       );
-                    
-                    
-                    return InkWell(
-                      onTap: () {
-                        if(formKey.currentState!.validate()){
-                        Provider.of<AuthController>(context, listen: false)
-                            .onSignUp(userModel);
-                        }
-                        
-                        
-                      },
-                      child: Container(
+                    } else {
+                      return Container(
                         height: 47,
                         width: screenWidth * 0.50,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF6885EB),
+                          color: const Color(0xFF68D4EB),
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: Center(
                           child: Text(
-                            'Register',
+                            'Wait',
                             style: GoogleFonts.lato(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: 20,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
-                      ),
-                    );
+                      );
+                    }
                   }),
                 ],
               )

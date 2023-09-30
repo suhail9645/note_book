@@ -10,12 +10,12 @@ class PrimaryForm extends StatelessWidget {
     super.key,
     required this.hint,
     required this.title,
-    required this.controller,
+   
     required this.userMOdel,
   });
   final String hint;
   final String title;
-  final TextEditingController controller;
+
   final UserMOdel userMOdel;
   @override
   Widget build(BuildContext context) {
@@ -30,6 +30,7 @@ class PrimaryForm extends StatelessWidget {
           ],
         ),
         TextFormField(
+          
           onChanged: (value) {
             if(title=='Email'){
               userMOdel.email=value;
@@ -37,7 +38,7 @@ class PrimaryForm extends StatelessWidget {
               userMOdel.password=value;
             }
           },
-          controller: controller,
+        
           style: const TextStyle(
               fontSize: 16.0, height: 2.0, color: Colors.black),
           decoration: InputDecoration(
