@@ -36,7 +36,7 @@ class HomeScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child:const Icon(Icons.add,size: 25,),
         onPressed: () {
-        Navigator.pushNamed(context, 'NoteAddEdit Screen',arguments: AddOrEdit.addNote);
+        Navigator.pushNamed(context, 'NoteAddEdit Screen',arguments: NoteAddEditScreen(addOrEdit: AddOrEdit.addNote));
       },),
     );
   }

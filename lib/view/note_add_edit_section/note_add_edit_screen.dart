@@ -10,9 +10,9 @@ import 'package:provider/provider.dart';
 enum AddOrEdit { addNote, editNote }
 
 class NoteAddEditScreen extends StatelessWidget {
-  NoteAddEditScreen({super.key, required this.addOrEdit});
+  NoteAddEditScreen({super.key, required this.addOrEdit, this.noteForEdit});
   final AddOrEdit addOrEdit;
-
+  final Note? noteForEdit;
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final Note note = Note(heading: '', content: '');
   @override
@@ -61,6 +61,7 @@ class NoteAddEditScreen extends StatelessWidget {
                       ),
                       Center(
                         child: TextFormField(
+                          initialValue: noteForEdit?.heading,
                           style: GoogleFonts.inter(
                               fontSize: 18, fontWeight: FontWeight.w600),
                           onChanged: (value) {
@@ -95,6 +96,7 @@ class NoteAddEditScreen extends StatelessWidget {
                         style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
                       ),
                       TextFormField(
+                          initialValue: noteForEdit?.content,
                           onChanged: (value) {
                             note.content = value;
                           },
@@ -196,19 +198,81 @@ class NoteAddEditScreen extends StatelessWidget {
                               children: [
                                 Expanded(
                                   flex: 3,
-                                  child: Container(
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: const Color.fromARGB(
-                                          255, 240, 80, 48),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'DELETE',
-                                        style: GoogleFonts.lato(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                  child: InkWell(
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => AlertDialog(
+                                          title: Text('Are You Sure',
+                                              style: GoogleFonts.ubuntu(
+                                                  fontWeight: FontWeight.bold)),
+                                          content: Text(
+                                              'Delete ${noteForEdit?.heading}', style: GoogleFonts.ubuntu(
+                                                  fontWeight: FontWeight.w600,fontSize: 17)),
+                                          actions: [
+                                            InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                  height: 40,
+                                                  width: 100,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              17),
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              124,
+                                                              244,
+                                                              54)),
+                                                  child: Center(
+                                                      child: Text(
+                                                    'NO',
+                                                    style: GoogleFonts.inter(
+                                                        fontWeight:
+                                                            FontWeight.w600),
+                                                  ))),
+                                            ),
+                                            InkWell(
+                                              onTap: () {
+                                                
+                                               Provider.of<NoteController>(context,listen: false).deleteNote(noteForEdit!.docId!);
+                                               Navigator.popUntil(context, (route) => route.settings.name == 'Home Screen');
+                                              },
+                                              child: Container(
+                                                  height: 40,
+                                                  width: 100,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              17),
+                                                      color:const Color.fromARGB(
+                                                          255, 244, 95, 54)),
+                                                  child: Center(
+                                                      child: Text('YES',
+                                                          style: GoogleFonts.inter(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600),),),),
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 45,
+                                      decoration: BoxDecoration(
+                                        color: const Color.fromARGB(
+                                            255, 240, 80, 48),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'DELETE',
+                                          style: GoogleFonts.lato(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                     ),
                                   ),

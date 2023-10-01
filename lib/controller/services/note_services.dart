@@ -36,4 +36,22 @@ class NoteServices {
       return Failure(error: '', message: 'Please try again');
     }
   }
+  Stream<QuerySnapshot<Map<String, dynamic>>>fetchAllNotes()async*{
+    final data=firestore.collection('All Data')
+          .doc(docId)
+          .collection('Data').snapshots();
+   yield* data;
+  }
+  Future<Failure?>deleteNote(String id)async{
+    try{
+      await firestore.collection('All Data').doc(docId).collection('Data').doc(id).delete();
+      return null;
+    }
+    on FirebaseException catch(e){
+      return Failure(error: 'Something wrong', message: e.message.toString());
+    }
+    catch(e){
+      return Failure(error: 'Somehting Wrong', message: 'Please Try againg');
+    }
+  }
 }

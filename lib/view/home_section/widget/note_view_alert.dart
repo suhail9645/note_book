@@ -1,18 +1,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_book/model/note_model/note_model.dart';
 import 'package:note_book/view/note_add_edit_section/note_add_edit_screen.dart';
 
 class NoteViewAlert extends StatelessWidget {
   const NoteViewAlert({
     super.key,
     required this.color,
-    required this.screenHight,
+    required this.screenHight, required this.note,
   });
 
   final Color color;
   final double screenHight;
-
+  final Note note;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -23,24 +24,21 @@ class NoteViewAlert extends StatelessWidget {
         ),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-      title: const Row(
+      title:  Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text('Product design'),
+          Text(note.heading),
         ],
       ),
       content: Container(
         constraints: BoxConstraints(maxHeight: screenHight * 0.50),
-        child: const SingleChildScrollView(
+        child:  SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Reply to emails'
-                'Prepare presentation slides for the marketing meeting'
-                'Conduct research on competitor products'
-                'Schedule and plan customer interviews',
+                note.content,
               ),
             ],
           ),
@@ -49,7 +47,7 @@ class NoteViewAlert extends StatelessWidget {
       actions: [
         InkWell(
           onTap: () {
-            Navigator.pushNamed(context, 'NoteAddEdit Screen',arguments: AddOrEdit.editNote);
+            Navigator.pushNamed(context, 'NoteAddEdit Screen',arguments: NoteAddEditScreen(addOrEdit: AddOrEdit.editNote,noteForEdit: note,));
           },
           child: Container(
             height: 44,

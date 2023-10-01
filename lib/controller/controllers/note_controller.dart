@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:note_book/controller/services/note_services.dart';
 import 'package:note_book/model/failure/failure.dart';
@@ -18,5 +19,15 @@ class NoteController extends ChangeNotifier{
   }
   isLoading=false;
   notifyListeners();
+  }
+  Stream<QuerySnapshot<Map<String, dynamic>>>fetchAllNotes()async*{
+    NoteServices noteServices=NoteServices.instance;
+    yield* noteServices.fetchAllNotes();
+    
+  }
+  void deleteNote(String docId)async{
+    NoteServices noteServices=NoteServices.instance;
+    failure=await noteServices.deleteNote(docId);
+    notifyListeners();
   }
 }
