@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:note_book/controller/controllers/note_controller.dart';
 import 'package:note_book/core/const/colors.dart';
 import 'package:note_book/core/const/widget.dart';
 import 'package:note_book/model/note_model/note_model.dart';
 import 'package:note_book/view/home_section/home_screen.dart';
+import 'package:provider/provider.dart';
 
 enum AddOrEdit { addNote, editNote }
 
@@ -12,7 +14,7 @@ class NoteAddEditScreen extends StatelessWidget {
   final AddOrEdit addOrEdit;
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final Note note=Note(heading: '', content: '');
+  final Note note = Note(heading: '', content: '');
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -43,10 +45,10 @@ class NoteAddEditScreen extends StatelessWidget {
               ),
             ),
             SingleChildScrollView(
-              child: Form(
-                key: formKey,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 23),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 23),
+                child: Form(
+                  key: formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -59,9 +61,11 @@ class NoteAddEditScreen extends StatelessWidget {
                       ),
                       Center(
                         child: TextFormField(
-                         onChanged: (value) {
-                           note.heading=value;
-                         },
+                          style: GoogleFonts.inter(
+                              fontSize: 18, fontWeight: FontWeight.w600),
+                          onChanged: (value) {
+                            note.heading = value;
+                          },
                           maxLines: 3,
                           decoration: InputDecoration(
                               filled: true,
@@ -91,24 +95,23 @@ class NoteAddEditScreen extends StatelessWidget {
                         style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
                       ),
                       TextFormField(
-                         onChanged: (value) {
-                           note.content=value;
-                         },
+                          onChanged: (value) {
+                            note.content = value;
+                          },
                           maxLines: 15,
-                          decoration:  InputDecoration(
-                             filled: true,
+                          decoration: InputDecoration(
+                              filled: true,
                               fillColor: kFormColor,
-                            contentPadding:const EdgeInsets.symmetric(
-                                horizontal: 12, vertical: 0),
-                            hintText: 'Content',
-                            border: OutlineInputBorder(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 0),
+                              hintText: 'Content',
+                              border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(15.0),
-                              borderSide: const BorderSide(
-                                width: 0,
-                                style: BorderStyle.none,
-                              ),
-                            )
-                          ),
+                                borderSide: const BorderSide(
+                                  width: 0,
+                                  style: BorderStyle.none,
+                                ),
+                              )),
                           validator: (value) {
                             if (value == null || value == '') {
                               return 'Content required';
@@ -121,29 +124,72 @@ class NoteAddEditScreen extends StatelessWidget {
                           ? Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                InkWell(
-                                  onTap: () {
-                                    if (formKey.currentState!.validate()) {
-                                      print('lalkakl');
-                                    }
-                                  },
-                                  child: Container(
-                                    height: 45,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF689FF3),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'ADD NOTE',
-                                        style: GoogleFonts.lato(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                Consumer<NoteController>(
+                                    builder: (context, value, child) {
+                                  if (value.isSuccess) {
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((timeStamp) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                          content:
+                                              Text('Note Successfully added'),
+                                        ),
+                                      );
+                                      Navigator.pop(context);
+                                    });
+                                  }
+                                  if (!value.isLoading) {
+                                    return InkWell(
+                                      onTap: () {
+                                        if (formKey.currentState!.validate()) {
+                                          Provider.of<NoteController>(context,
+                                                  listen: false)
+                                              .addNoteToFireBase(note);
+                                        }
+                                      },
+                                      child: Container(
+                                        height: 45,
+                                        width: 150,
+                                        decoration: BoxDecoration(
+                                          color: const Color(0xFF689FF3),
+                                          borderRadius:
+                                              BorderRadius.circular(15),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'ADD NOTE',
+                                            style: GoogleFonts.lato(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
                                       ),
-                                    ),
-                                  ),
-                                ),
+                                    );
+                                  } else {
+                                    return Container(
+                                      height: 45,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF689FF3),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Center(
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'Wait',
+                                              style: GoogleFonts.lato(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const CircularProgressIndicator()
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }),
                               ],
                             )
                           : Row(

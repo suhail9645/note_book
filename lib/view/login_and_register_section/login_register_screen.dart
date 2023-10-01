@@ -25,6 +25,12 @@ class _LoginAndRegisterScreenState extends State<LoginAndRegisterScreen>
         ..repeat();
       final   PageController controller = PageController();
   @override
+  void dispose() {
+   aController.dispose();
+   controller.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
    
     Size size = MediaQuery.of(context).size;

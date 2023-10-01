@@ -87,7 +87,7 @@ class LogiView extends StatelessWidget {
                             );
                             value.failure = null;
                           } else if (value.isSuccess) {
-                            Navigator.pushNamed(context, 'Home Screen');
+                             Navigator.pushReplacementNamed(context, 'Home Screen');
                           }
                         });
                         if (!value.isLoading) {
