@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_book/controller/controllers/auth_controller.dart';
 import 'package:note_book/controller/controllers/note_controller.dart';
+import 'package:note_book/controller/controllers/search_controller.dart';
 import 'package:note_book/core/router.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,8 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => AuthController(),),
-        ChangeNotifierProvider(create: (context) => NoteController(),)
+        ChangeNotifierProvider(create: (context) => NoteController(),),
+        ChangeNotifierProvider(create: (context) => SearchResultController(),)
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

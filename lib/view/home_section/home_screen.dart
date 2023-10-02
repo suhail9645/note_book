@@ -26,9 +26,9 @@ class HomeScreen extends StatelessWidget {
               spaceForHeight20,
             const  Branding(),
               spaceForHeight20,
-              const SearchContainer(),
+               SearchContainer(),
               spaceForHeight20,
-              const NotesGrid()
+             const  NotesGrid()
             ],
           ),
         ),
