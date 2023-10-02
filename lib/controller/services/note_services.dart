@@ -1,4 +1,4 @@
-import 'dart:convert';
+
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:note_book/model/failure/failure.dart';
@@ -26,9 +26,7 @@ class NoteServices {
           .doc(docId)
           .collection('Data')
           .add({'heading': noteModel.heading, 'content': noteModel.content});
-      // await firestore
-      //     .collection('Notes')
-      //     .add({'heading': noteModel.heading, 'content': noteModel.content});
+
       return null;
     } on FirebaseException catch (e) {
       return Failure(error: 'Something wrong', message: e.message.toString());
@@ -46,12 +44,20 @@ class NoteServices {
     try{
       await firestore.collection('All Data').doc(docId).collection('Data').doc(id).delete();
       return null;
-    }
-    on FirebaseException catch(e){
+    } on FirebaseException catch (e) {
       return Failure(error: 'Something wrong', message: e.message.toString());
-    }
-    catch(e){
+    } catch (e) {
       return Failure(error: 'Somehting Wrong', message: 'Please Try againg');
+    }
+  }
+  Future<Failure?>updateNote(String id,Note newNote)async{
+    try{
+      await firestore.collection('All Data').doc(docId).collection('Data').doc(id).update({'heading': newNote.heading, 'content': newNote.content});
+      return null;
+    } on FirebaseException catch (e) {
+      return Failure(error: 'Something wrong', message: e.message.toString());
+    } catch (e) {
+      return Failure(error: 'Something Wrong', message: 'Please Try againg');
     }
   }
 }

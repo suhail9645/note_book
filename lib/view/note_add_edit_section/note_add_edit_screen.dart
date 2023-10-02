@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:note_book/controller/controllers/note_controller.dart';
 import 'package:note_book/core/const/colors.dart';
 import 'package:note_book/core/const/widget.dart';
 import 'package:note_book/model/note_model/note_model.dart';
 import 'package:note_book/view/home_section/home_screen.dart';
-import 'package:provider/provider.dart';
+import 'widget/delete_button.dart';
+import 'widget/edit_button.dart';
+import 'widget/note_add_button.dart';
 
 enum AddOrEdit { addNote, editNote }
 
@@ -123,179 +124,12 @@ class NoteAddEditScreen extends StatelessWidget {
                           }),
                       spaceForHeight20,
                       addOrEdit == AddOrEdit.addNote
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Consumer<NoteController>(
-                                    builder: (context, value, child) {
-                                  if (value.isSuccess) {
-                                    WidgetsBinding.instance
-                                        .addPostFrameCallback((timeStamp) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(
-                                        const SnackBar(
-                                          content:
-                                              Text('Note Successfully added'),
-                                        ),
-                                      );
-                                      Navigator.pop(context);
-                                    });
-                                  }
-                                  if (!value.isLoading) {
-                                    return InkWell(
-                                      onTap: () {
-                                        if (formKey.currentState!.validate()) {
-                                          Provider.of<NoteController>(context,
-                                                  listen: false)
-                                              .addNoteToFireBase(note);
-                                        }
-                                      },
-                                      child: Container(
-                                        height: 45,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                          color: const Color(0xFF689FF3),
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'ADD NOTE',
-                                            style: GoogleFonts.lato(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  } else {
-                                    return Container(
-                                      height: 45,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFF689FF3),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Row(
-                                          children: [
-                                            Text(
-                                              'Wait',
-                                              style: GoogleFonts.lato(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            const CircularProgressIndicator()
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                }),
-                              ],
-                            )
+                          ? NoteAddButton(formKey: formKey, note: note)
                           : Row(
                               children: [
-                                Expanded(
-                                  flex: 3,
-                                  child: InkWell(
-                                    onTap: () {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => AlertDialog(
-                                          title: Text('Are You Sure',
-                                              style: GoogleFonts.ubuntu(
-                                                  fontWeight: FontWeight.bold)),
-                                          content: Text(
-                                              'Delete ${noteForEdit?.heading}', style: GoogleFonts.ubuntu(
-                                                  fontWeight: FontWeight.w600,fontSize: 17)),
-                                          actions: [
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                  height: 40,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              17),
-                                                      color:
-                                                          const Color.fromARGB(
-                                                              255,
-                                                              124,
-                                                              244,
-                                                              54)),
-                                                  child: Center(
-                                                      child: Text(
-                                                    'NO',
-                                                    style: GoogleFonts.inter(
-                                                        fontWeight:
-                                                            FontWeight.w600),
-                                                  ))),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                
-                                               Provider.of<NoteController>(context,listen: false).deleteNote(noteForEdit!.docId!);
-                                               Navigator.popUntil(context, (route) => route.settings.name == 'Home Screen');
-                                              },
-                                              child: Container(
-                                                  height: 40,
-                                                  width: 100,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              17),
-                                                      color:const Color.fromARGB(
-                                                          255, 244, 95, 54)),
-                                                  child: Center(
-                                                      child: Text('YES',
-                                                          style: GoogleFonts.inter(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),),),),
-                                            )
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      height: 45,
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(
-                                            255, 240, 80, 48),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          'DELETE',
-                                          style: GoogleFonts.lato(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                DeletButton(noteForEdit: noteForEdit),
                                 spaceForWidth10,
-                                Expanded(
-                                  flex: 5,
-                                  child: Container(
-                                    height: 45,
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF689FF3),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        'EDIT NOTE',
-                                        style: GoogleFonts.lato(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                                EditButton(note: note, noteForEdit: noteForEdit),
                               ],
                             ),
                     ],

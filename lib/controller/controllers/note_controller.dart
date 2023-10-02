@@ -30,4 +30,14 @@ class NoteController extends ChangeNotifier{
     failure=await noteServices.deleteNote(docId);
     notifyListeners();
   }
+  void updateNote(String docId,Note newNote)async{
+     NoteServices noteServices=NoteServices.instance;
+    failure=await noteServices.updateNote(docId, newNote);
+    if(failure==null){
+    isSuccess=true;
+    notifyListeners();
+  }
+   isLoading=false;
+  notifyListeners();
+  }
 }
