@@ -30,7 +30,9 @@ class NotesGrid extends StatelessWidget {
                   return Consumer<SearchResultController>(
                     builder: (context, value, child) {
                       
-                  
+                  if(value.isSearch&&value.query!=''&&value.searchResult.isEmpty){
+                    return const Center(child:  Text('No Items to Show'));
+                  }
                     return StaggeredGrid.count(
                       crossAxisCount: 2,
                       crossAxisSpacing: 10,

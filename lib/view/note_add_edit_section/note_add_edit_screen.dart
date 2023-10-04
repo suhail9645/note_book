@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_book/core/const/colors.dart';
@@ -92,9 +93,14 @@ class NoteAddEditScreen extends StatelessWidget {
                         ),
                       ),
                       spaceForHeight10,
-                      Text(
-                        'Content',
-                        style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
+                      Row(
+                        children: [
+                          Text(
+                            'Content',
+                            style: GoogleFonts.k2d(fontWeight: FontWeight.bold),
+                          ),const Spacer(),
+                          
+                        ],
                       ),
                       TextFormField(
                           initialValue: noteForEdit?.content,
